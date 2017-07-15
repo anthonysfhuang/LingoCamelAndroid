@@ -3,10 +3,12 @@ package com.example.huangshifeng.RingoCamel;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,18 +18,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by huangshifeng on 11/06/2017.
  */
 public class RegisterActivity extends Activity {
-    private EditText username, userpass, repass, email;
+    private EditText username, userpass, repass;
     private Button login, register, exit, reset;
-    private RadioGroup radioGroup;
-    private RadioButton boy, girl;
-    private Spinner profession;
-    private String name, password, sex, job;
+    private Spinner spinner_gen, spinner_lan;
+    private String name, password;
     private String usermail = "\\w{0,}\\@\\w{2,}\\.\\w{0,}";
-    String professions[] = {"teacher", "Android Developer", "Student", "Kitchen Hand", "Bartender"};
+    private TextView Title, UserText, PassText, Gender, Language;
 
     @Override
     protected void onCreate(Bundle SaveInstanceState){
@@ -35,6 +37,7 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.registerlayout);
         init();
         buttonListener();
+        SpinnerListener();
     }
 
     public void buttonListener() {
@@ -54,59 +57,36 @@ public class RegisterActivity extends Activity {
                 }
             }
         });
+        /*
         email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(email.getText().toString().matches(usermail)){
+                if (email.getText().toString().matches(usermail)) {
                     Toast.makeText(RegisterActivity.this, "Email format incorrect", Toast.LENGTH_LONG).show();
                 }
             }
         });
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == boy.getId()) {
-                    sex = boy.getText().toString();
-                    Toast.makeText(getApplicationContext(), "You choosed" + boy.getText().toString(), Toast.LENGTH_LONG).show();
-                }
-                if (checkedId == girl.getId()) {
-                    sex = girl.getText().toString();
-                    Toast.makeText(getApplicationContext(), "You choosed" + girl.getText().toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        profession.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                job = professions[position];
-                System.out.println("Job:" + job);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        */
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 name = username.getText().toString().trim();
                 password = userpass.getText().toString().trim();
                 String repassword = repass.getText().toString().trim();
-                String emails = email.getText().toString().trim();
+                //String emails = email.getText().toString().trim();
                 if (!password.equals(repass)) {
                     Toast.makeText(RegisterActivity.this, "two passwords are different", Toast.LENGTH_LONG).show();
                     userpass.setText("");
                     repass.setText("");
                 }
+                /*
                 if (!email.getText().toString().matches(usermail)) {
                     Toast.makeText(RegisterActivity.this, "email format incorrect", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(RegisterActivity.this, "Congraduation!!, " +
                             "Register successful, \n\n\nusername:" + name +
-                            "\npassword:" + password + "\nSex:" + sex + "\nJob:" + job, Toast.LENGTH_LONG).show();
-                }
+                            "\npassword:" + password, Toast.LENGTH_LONG).show();
+                }*/
             }
         });
 
@@ -130,7 +110,7 @@ public class RegisterActivity extends Activity {
                 username.setText("");
                 userpass.setText("");
                 repass.setText("");
-                email.setText("");
+                //email.setText("");
             }
         });
 
@@ -142,24 +122,40 @@ public class RegisterActivity extends Activity {
         });
 
     }
+    public void SpinnerListener()
+    {
+        ArrayAdapter<CharSequence> genderList = ArrayAdapter.createFromResource(this, R.array.gender_sel, android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> languageList = ArrayAdapter.createFromResource(this, R.array.language_sel, android.R.layout.simple_spinner_dropdown_item);
 
-    private void init(){
-        username = (EditText)this.findViewById(R.id.editText1);
-        userpass = (EditText)this.findViewById(R.id.editText2);
-        repass = (EditText)this.findViewById(R.id.editText3);
-        email = (EditText)this.findViewById(R.id.editText4);
-        register = (Button)this.findViewById(R.id.button1);
-        login = (Button)this.findViewById(R.id.button2);
-        reset = (Button)this.findViewById(R.id.button3);
-        exit = (Button)this.findViewById(R.id.button4);
-        radioGroup = (RadioGroup)this.findViewById(R.id.sex);
-        boy = (RadioButton)this.findViewById(R.id.radioButton);
-        girl = (RadioButton)this.findViewById(R.id.radioButton2);
-        profession = (Spinner)this.findViewById(R.id.spinner);
-        profession.setPrompt("Please Choose your job");
-        profession.setAdapter(new Profession(this));
+        spinner_gen.setAdapter(genderList);
+        spinner_lan.setAdapter(languageList);
+
     }
+    private void init(){
+        username = (EditText)this.findViewById(R.id.editText_username);
+        userpass = (EditText)this.findViewById(R.id.editText_password);
+        repass = (EditText)this.findViewById(R.id.editText_confirmpassword);
+        register = (Button)this.findViewById(R.id.button_register);
+        login = (Button)this.findViewById(R.id.button_login);
+        reset = (Button)this.findViewById(R.id.button_reset);
+        exit = (Button)this.findViewById(R.id.button_exit);
+        spinner_gen = (Spinner)findViewById(R.id.spinner_gender);
+        spinner_lan = (Spinner)findViewById(R.id.spinner_language);
 
+        Title = (TextView)findViewById(R.id.textView_title);
+        UserText = (TextView)findViewById(R.id.textView_username);
+        PassText = (TextView)findViewById(R.id.textView_password);
+        Gender = (TextView)findViewById(R.id.textView_confirm_password);
+        Language = (TextView)findViewById(R.id.textView_language);
+
+        Title.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/centry_gothic.ttf"));
+        UserText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/centry_gothic.ttf"));
+        PassText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/centry_gothic.ttf"));
+        Gender.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/centry_gothic.ttf"));
+        Language.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/centry_gothic.ttf"));
+
+    }
+/*
     class Profession extends BaseAdapter {
         Context context;
         Profession(Context context){
@@ -185,5 +181,5 @@ public class RegisterActivity extends Activity {
 
             return textview;
         }
-    }
+    }*/
 }
